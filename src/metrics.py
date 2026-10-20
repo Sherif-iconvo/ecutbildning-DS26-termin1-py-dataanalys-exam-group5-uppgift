@@ -16,6 +16,7 @@ def revenue_by_category(df: pd.DataFrame) -> pd.Series:
     df.groupby("category")["revenue"]
     .sum()
     .sort_values(ascending=False)
+    .head(3)
 )
 
 if __name__ == "__main__":
