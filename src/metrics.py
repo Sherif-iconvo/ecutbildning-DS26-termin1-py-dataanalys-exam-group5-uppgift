@@ -1,5 +1,5 @@
 import pandas as pd
-
+import matplotlib.pyplot as plt
 
 def revenue_by_category(df: pd.DataFrame) -> pd.Series:
     return (
@@ -55,7 +55,25 @@ def revenue_by_city(df: pd.DataFrame) -> pd.Series:
         .sum()
         .sort_values(ascending=False)
     )
+def plot_revenue_by_city(city_revenue: pd.Series) -> None:
+    """
+    Skapar ett stapeldiagram för försäljning per stad.
+    """
 
+    plt.figure(figsize=(8, 5))
+
+    city_revenue.plot(
+        kind="bar",
+        color="skyblue"
+    )
+
+    plt.title("Revenue by City")
+    plt.xlabel("City")
+    plt.ylabel("Revenue")
+
+    plt.tight_layout()
+
+    plt.show()
 
 if __name__ == "__main__":
     from io_utils import load_data
@@ -82,4 +100,7 @@ city_revenue = revenue_by_city(df)
 
 print("\nRevenue by city:")
 print(city_revenue)
+
+plot_revenue_by_city(city_revenue)
+
 
