@@ -35,6 +35,14 @@ def check_data_quality(df: pd.DataFrame) -> None:
     print("\nNegative units:")
     print((df["units"] < 0).sum())
 
+def calculate_order_value(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Beräknar ordervärde per order.
+    """
+
+    df["calculated_revenue"] = df["price"] * df["units"]
+
+    return df
 
 if __name__ == "__main__":
     from io_utils import load_data
@@ -48,3 +56,12 @@ if __name__ == "__main__":
     print("Rows after cleaning:", len(df))
 
     check_data_quality(df)
+
+df = calculate_order_value(df)
+
+print(
+    df[
+        ["order_id", "price", "units", "revenue", "calculated_revenue"]
+    ].head()
+)
+
