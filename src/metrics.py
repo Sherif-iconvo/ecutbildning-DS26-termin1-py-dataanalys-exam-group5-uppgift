@@ -56,6 +56,21 @@ def revenue_by_city(df: pd.DataFrame) -> pd.Series:
         .sort_values(ascending=False)
     )
 
+def revenue_by_month(df: pd.DataFrame) -> pd.Series:
+    """
+    Beräknar total intäkt per månad.
+    """
+
+    df = df.copy()
+
+    df["date"] = pd.to_datetime(df["date"])
+
+    monthly_revenue = (
+        df.groupby(df["date"].dt.month)["revenue"]
+        .sum()
+    )
+
+    return monthly_revenue
 
 def plot_revenue_by_city(city_revenue: pd.Series) -> None:
     """
@@ -97,6 +112,31 @@ def plot_revenue_by_category(category_revenue: pd.Series) -> None:
 
     plt.show()
 
+
+def plot_revenue_by_month(monthly_revenue: pd.Series) -> None:
+    """
+    Visualiserar intäkter över tid.
+    """
+
+    plt.figure(figsize=(8, 5))
+
+    monthly_revenue.plot(
+        kind="line",
+        marker="o",
+        color="purple"
+    )
+
+    plt.title("Revenue by Month")
+    plt.xlabel("Month")
+    plt.ylabel("Revenue")
+
+    plt.grid(True)
+
+    plt.tight_layout()
+
+    plt.show()
+
+
 if __name__ == "__main__":
     from io_utils import load_data
 
@@ -121,6 +161,7 @@ print(
 city_revenue = revenue_by_city(df)
 
 print("\nRevenue by city:")
+
 print(city_revenue)
 
 plot_revenue_by_city(city_revenue)
@@ -128,8 +169,15 @@ plot_revenue_by_city(city_revenue)
 category_revenue = revenue_by_category(df)
 
 print("\nTop categories:")
+
 print(category_revenue)
 
 plot_revenue_by_category(category_revenue)
 
+monthly_revenue = revenue_by_month(df)
 
+print("\nRevenue by month:")
+
+print(monthly_revenue)
+
+plot_revenue_by_month(monthly_revenue)
