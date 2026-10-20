@@ -55,6 +55,8 @@ def revenue_by_city(df: pd.DataFrame) -> pd.Series:
         .sum()
         .sort_values(ascending=False)
     )
+
+
 def plot_revenue_by_city(city_revenue: pd.Series) -> None:
     """
     Skapar ett stapeldiagram för försäljning per stad.
@@ -69,6 +71,26 @@ def plot_revenue_by_city(city_revenue: pd.Series) -> None:
 
     plt.title("Revenue by City")
     plt.xlabel("City")
+    plt.ylabel("Revenue")
+
+    plt.tight_layout()
+
+    plt.show()
+
+def plot_revenue_by_category(category_revenue: pd.Series) -> None:
+    """
+    Skapar ett stapeldiagram för försäljning per kategori.
+    """
+
+    plt.figure(figsize=(8, 5))
+
+    category_revenue.plot(
+        kind="bar",
+        color="lightgreen"
+    )
+
+    plt.title("Revenue by Category")
+    plt.xlabel("Category")
     plt.ylabel("Revenue")
 
     plt.tight_layout()
@@ -102,5 +124,12 @@ print("\nRevenue by city:")
 print(city_revenue)
 
 plot_revenue_by_city(city_revenue)
+
+category_revenue = revenue_by_category(df)
+
+print("\nTop categories:")
+print(category_revenue)
+
+plot_revenue_by_category(category_revenue)
 
 
