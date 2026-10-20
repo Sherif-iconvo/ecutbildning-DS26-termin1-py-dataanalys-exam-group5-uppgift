@@ -2,7 +2,6 @@ import pandas as pd
 
 
 def revenue_by_category(df: pd.DataFrame) -> pd.Series:
-
     return (
         df.groupby("category")["revenue"]
         .sum()
@@ -17,10 +16,24 @@ def clean_data(df: pd.DataFrame) -> pd.DataFrame:
     """
 
     df = df.drop_duplicates()
-
     df = df.dropna()
 
     return df
+
+
+def check_data_quality(df: pd.DataFrame) -> None:
+    """
+    Kontrollerar saknade och ovanliga värden.
+    """
+
+    print("\nMissing values per column:")
+    print(df.isnull().sum())
+
+    print("\nNegative revenues:")
+    print((df["revenue"] < 0).sum())
+
+    print("\nNegative units:")
+    print((df["units"] < 0).sum())
 
 
 if __name__ == "__main__":
@@ -33,3 +46,5 @@ if __name__ == "__main__":
     df = clean_data(df)
 
     print("Rows after cleaning:", len(df))
+
+    check_data_quality(df)
