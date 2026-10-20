@@ -44,6 +44,19 @@ def calculate_order_value(df: pd.DataFrame) -> pd.DataFrame:
 
     return df
 
+
+def revenue_by_city(df: pd.DataFrame) -> pd.Series:
+    """
+    Beräknar total intäkt per stad.
+    """
+
+    return (
+        df.groupby("city")["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+
+
 if __name__ == "__main__":
     from io_utils import load_data
 
@@ -64,4 +77,9 @@ print(
         ["order_id", "price", "units", "revenue", "calculated_revenue"]
     ].head()
 )
+
+city_revenue = revenue_by_city(df)
+
+print("\nRevenue by city:")
+print(city_revenue)
 
