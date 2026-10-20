@@ -12,7 +12,11 @@ def revenue_by_category(df: pd.DataFrame) -> pd.Series:
         pd.Series: Total intäkt per kategori
     """
 
-    return df.groupby("category")["revenue"].sum()
+    return (
+    df.groupby("category")["revenue"]
+    .sum()
+    .sort_values(ascending=False)
+)
 
 if __name__ == "__main__":
     from io_utils import load_data
