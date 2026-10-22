@@ -29,7 +29,7 @@ __init__: Initializes the analyzer by loading and cleaning transaction data. Any
 
 from pathlib import Path
 import pandas as pd
-from io_utils import load_and_clean_transactions    # Import the wrapper function from io_utils
+from src.io_utils import load_and_clean_transactions    # Import the wrapper function from io_utils
 
 class EcommerceAnalyzer:
     def __init__(self, filepath: str | Path | None = None) -> None:
