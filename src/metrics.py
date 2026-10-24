@@ -21,6 +21,14 @@ def check_data_quality(df: pd.DataFrame) -> None:
     print("\nNegative revenue:")
     print((df["revenue"] < 0).sum())
 
+def revenue_by_category(df: pd.DataFrame) -> pd.Series:
+
+    return (
+        df.groupby("category")["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+
 
 if __name__ == "__main__":
     from io_utils import load_data
@@ -28,3 +36,6 @@ if __name__ == "__main__":
     df = load_data()
 
     check_data_quality(df)
+    print("\nRevenue by category:")
+
+    print(revenue_by_category(df))
