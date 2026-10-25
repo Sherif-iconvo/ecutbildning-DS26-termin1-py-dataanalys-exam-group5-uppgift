@@ -44,6 +44,16 @@ def revenue_by_category(df: pd.DataFrame) -> pd.Series:
         .sort_values(ascending=False)
     )
 
+def revenue_by_city(df: pd.DataFrame) -> pd.Series:
+    """
+    Calculate total revenue per city.
+    """
+
+    return (
+        df.groupby("city")["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+    )
 
 if __name__ == "__main__":
     from io_utils import load_data
