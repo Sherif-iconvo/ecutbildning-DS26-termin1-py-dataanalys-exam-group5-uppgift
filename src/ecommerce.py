@@ -1,5 +1,6 @@
 import pandas as pd
 
+
 class EcommerceAnalyzer:
     """
     Klass för analys av e-handelsdata.
@@ -10,10 +11,10 @@ class EcommerceAnalyzer:
 
     def get_total_revenue(self) -> float:
         """
-        Returnerar total intäkt.
+        Calculate and return the total revenue.
         """
-
         return self.df["revenue"].sum()
+
 
 if __name__ == "__main__":
     from io_utils import load_data
@@ -22,4 +23,5 @@ if __name__ == "__main__":
 
     analyzer = EcommerceAnalyzer(df)
 
-    print("EcommerceAnalyzer created successfully.")
+    print("Total revenue:")
+    print(analyzer.get_total_revenue())

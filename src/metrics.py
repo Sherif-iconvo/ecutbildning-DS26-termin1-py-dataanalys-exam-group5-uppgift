@@ -3,7 +3,14 @@ import pandas as pd
 
 def check_data_quality(df: pd.DataFrame) -> None:
     """
-    Kontrollerar datakvaliteten.
+    Check data quality in the dataset.
+
+    Checks:
+    - Missing values
+    - Duplicate rows
+    - Negative prices
+    - Negative units
+    - Negative revenue values
     """
 
     print("Missing values:")
@@ -21,7 +28,15 @@ def check_data_quality(df: pd.DataFrame) -> None:
     print("\nNegative revenue:")
     print((df["revenue"] < 0).sum())
 
+
 def revenue_by_category(df: pd.DataFrame) -> pd.Series:
+    """
+    Calculate total revenue per category.
+
+    Returns:
+        pd.Series: Revenue grouped by category,
+        sorted in descending order.
+    """
 
     return (
         df.groupby("category")["revenue"]
@@ -36,6 +51,6 @@ if __name__ == "__main__":
     df = load_data()
 
     check_data_quality(df)
-    print("\nRevenue by category:")
 
+    print("\nRevenue by category:")
     print(revenue_by_category(df))
