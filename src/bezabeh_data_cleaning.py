@@ -55,14 +55,14 @@ def check_data_quality(data):
     print("Fem rader med högst intäkt:")
     print(data.nlargest(5, "revenue"))
 
-    if __name__ == "__main__":
+if __name__ == "__main__":
     # Hitta projektmappen.
-     from pathlib import Path
+    from pathlib import Path
     projektmapp = Path(__file__).resolve().parent.parent
 
-    # Skapa sökvägen till CSV-filen.
+    # Hitta CSV-filen.
     filsokvag = projektmapp / "data" / "ecommerce_sales.csv"
 
-    # Läs datan och kör kontrollerna.
+    # Läs in datan och kör kontrollerna.
     data = load_and_clean_data(filsokvag)
     check_data_quality(data)
