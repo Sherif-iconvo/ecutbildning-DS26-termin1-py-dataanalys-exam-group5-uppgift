@@ -36,34 +36,51 @@ def load_raw_transactions(filepath: str | Path | None = None) -> pd.DataFrame:
 # 2. CLEAN ONLY (Data Cleaning Responsibility)
 def clean_transactions(df: pd.DataFrame) -> pd.DataFrame:
     df = df.copy()              # Avoid modifying the original DataFrame in memory
-    
+
+    # (a) Clean the column names (extra spaces, inconsistent capitalization)
     df.columns = (df.columns
                   .str.strip()
                   .str.replace(" ", "_")
-                  .str.lower())
+                  .str.lower()
+                  )
+    
+    # (b) String Normalization    
+    df["city"] = df["city"].str.strip().str.title()
+    df["category"] = df["category"].str.strip().str.title()
 
-    #Types
+    # (c) Correct types (safe conversion, bad values become NaN)
     df["date"] = pd.to_datetime(df["date"], errors="coerce")
     df["order_id"] = pd.to_numeric(df["order_id"], errors="coerce").astype("Int64")
     df["price"] = pd.to_numeric(df["price"], errors="coerce").astype("float64")
     df["units"] = pd.to_numeric(df["units"], errors="coerce").astype("Int64")
     df["revenue"] = pd.to_numeric(df["revenue"], errors="coerce").astype("float64")
 
-    # String Normalization
-    df["city"] = df["city"].str.strip().str.title()
-    df["category"] = df["category"].str.strip().str.title()
+    # (d) Quality Checks & Filtering
+    # (d-i) Duplicates: order_id should be unique
+    df = df.drop_duplicates(subset="order_id")
+
+    # (d-ii) Rows that can't be saved: those with "no order_id" or "no date" (NaN)
+    df = df.dropna(subset=["order_id", "date"])
+
+    # (d-iii) Remove zero/negative values (missing values are kept so they can be repaired)
+    df = df[
+        (df["price"].isna() | (df["price"] > 0)) &
+        (df["units"].isna() | (df["units"] > 0)) &
+        (df["revenue"].isna() | (df["revenue"] > 0))
+        ]
     
-    # Quality Checks & Filtering
-    df = df.drop_duplicates(subset=["order_id"], keep="first")
-    df = df[(df["price"] > 0) & (df["units"] > 0)]
+    # (d-iv) Repair missing values from revenue = price * units
+    df["revenue"] = df["revenue"].fillna(df["price"] * df["units"])
+    df["price"]   = df["price"].fillna(df["revenue"] / df["units"])
+    df["units"]   = df["units"].fillna((df["revenue"] / df["price"]).round().astype("Int64"))
+
+    # (d-v) Whatever is still missing in price/units/revenue can't be reconstructed, so drop it
+    df = df.dropna(subset=["price", "units", "revenue"])
+
+    # (d-vi) Consistency: revenue must equal price * units
+    df = df[np.isclose(df["revenue"], df["price"] * df["units"], atol=0.01)]
     
-    expected_revenue = df["price"] * df["units"]
-    df = df[np.isclose(df["revenue"], expected_revenue, atol=0.01)]
-    # a NumPy function that checks whether two numbers (or two columns of numbers) are equal to each other within a small tolerance (np.isclose(a, b, atol=tolerance).
-    
-    df = df.dropna(subset=["date", "order_id"])
-    
-    return df
+    return df.reset_index(drop=True)
 
 # 3. CONVENIENCE WRAPPER (Combines both for quick usage)
 def load_and_clean_transactions(filepath: str | Path | None = None) -> pd.DataFrame:
