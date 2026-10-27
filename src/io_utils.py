@@ -1,12 +1,11 @@
 import pandas as pd
 
+#Loading data and do a parse change.
 def load_data(path: str) -> pd.DataFrame:
-    df = pd.read_csv(path)
+    df = pd.read_csv(path, parse_dates=["date"])
     return df
 
 def data_check(df):
-    #We want to check if out data is good to use:
-
     #Checks wheter there is any missing values.
     missing_values = df.isna().sum().sum()
     if missing_values > 0:
@@ -19,4 +18,7 @@ def data_check(df):
     if duplicates > 0:
         print("We have this many duplicates: ", duplicates)
     else:
-        print("No duplicates in the file was found.")
+        print("No duplicates in the file was found.") 
+    #Giving us a final information about our columns.
+    print(df.info())   
+    print(df.describe())
