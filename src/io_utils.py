@@ -1,3 +1,6 @@
 import pandas as pd
 
-print(df_clean)
+def load_data(path: str) -> pd.DataFrame:
+    df = pd.read_csv(path)
+    return df
+    
