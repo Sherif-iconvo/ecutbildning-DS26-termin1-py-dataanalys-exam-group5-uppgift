@@ -26,7 +26,6 @@ def check_data_quality(data):
     print("Saknade värden per kolumn:")
     print(data.isna().sum())
 
-    print(data.isna().sum())
 
             # Räkna exakt upprepade rader i hela tabellen.
     print("Exakt upprepade rader:", data.duplicated().sum())
@@ -66,3 +65,4 @@ if __name__ == "__main__":
     # Läs in datan och kör kontrollerna.
     data = load_and_clean_data(filsokvag)
     check_data_quality(data)
+    print("Återkommande order-ID:", data["order_id"].duplicated().sum())
