@@ -1,4 +1,4 @@
-# Hämta Sfunktion för att läsa rådata.
+# Hämta funktion för att läsa rådata.
 from src.io_utils import load_raw_transactions
 
 # Kör funktionen och spara tabellen i df.
