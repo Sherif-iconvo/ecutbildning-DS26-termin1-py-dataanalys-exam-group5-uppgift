@@ -10,7 +10,7 @@ This module handles reading the CSV file, parsing datatypes, and applying all
  3) load_and_clean_transactions(): Reads CSV file and applies cleaning rules in a single call.
 
  '''
-
+import os
 import pandas as pd
 from pathlib import Path
 import numpy as np
