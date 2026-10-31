@@ -38,25 +38,35 @@ class EcommerceAnalyzer:
 
     # --- Metrics Delegation ---
 
-    # --- När säljer vi? ---
+    # --- Sherifs fråga (3): När säljer vi? ---
     def date_range(self) -> tuple[pd.Timestamp, pd.Timestamp]: 
         return metrics.date_range(self.df)
+
+    def orders_per_weekday(self) -> pd.Series:
+        return metrics.orders_per_weekday(self.df)
 
     def orders_per_month(self) -> pd.Series:
         return metrics.orders_per_month(self.df)
 
-    def order_per_weekday(self) -> pd.Series:
-        return metrics.order_per_week(self.df)
+    def weekly_revenue_summary(self) -> pd.Series:
+        return metrics.weekly_revenue_summary(self.df)
+    
+    def weekday_revenue_summary(self) -> pd.DataFrame:
+        return metrics.weekday_revenue_summary(self.df)
 
     def monthly_revenue_summary(self) -> pd.DataFrame:
         return metrics.monthly_revenue_summary(self.df)
 
+    def monthly_revenue_change(self) -> pd.DataFrame:
+        return metrics.monthly_revenue_change(self.df)
 
-    # --- Vad säljer vi? / Var säljer vi? ---
+
+    # --- Sherifs fråga (1-2 + tid/månad): Vad säljer vi? / Var säljer vi? ---
     def category_performance(self, by_month: bool = False) -> pd.DataFrame:
         return metrics.category_performance(self.df, by_month)
 
     def city_performance(self, by_month: bool = False) -> pd.DataFrame:
         return  metrics.city_performance(self.df, by_month)
+    
 
     # --- Visualization Delegation ---
