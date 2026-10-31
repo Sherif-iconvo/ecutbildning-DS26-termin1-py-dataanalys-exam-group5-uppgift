@@ -117,3 +117,12 @@ def city_performance(df: pd.DataFrame, by_month: bool = False) -> pd.DataFrame:
     return result
 
 # slutet på Sherifs fråga (3) nyckeltals-funktioner.
+import pandas as pd
+
+def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
+    return (
+        df.groupby("category")["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    )
