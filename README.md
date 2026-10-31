@@ -73,12 +73,22 @@ Kolumner: `order_id`, `date`, `city`, `category`, `price`, `units`, `revenue`
 
 ## Gruppmedlemmar och ansvarsområden (Detta är bara ett exempel; den korrekta strukturen kommer att fastställas genom omröstning.)
 
-| Namn | Ansvarsområde |
-|------|---------------|
-| Sherif Khairallah | Uppsättning av repo, miljö och requirements, README | KLAR
-| _Namn_ | _t.ex. `io_utils.py` – inläsning av data och datakvalitet_ | ÖPPNA
-| _Namn_ | _t.ex. `metrics.py` – nyckeltalsfunktioner_ | ÖPPNA
-| _Namn_ | _t.ex. `viz.py` – visualiseringar_ |  ÖPPNA
-| _Namn_ | _t.ex. `ecommerce.py` / rapport-notebook_ | ÖPPNA
+** Grundläggande uppsättning/förarbete:**
+| Namn | Ansvarsområde | Status |
+|------|---------------|--------|
+| Sherif Khairallah | Repo, miljö, README | klar |
 
-Obs. Detta ska fastställas och senare uppdateras. Var och en kommer att ange sitt namn och sin roll eller sitt ansvarsområde i enlighet med vad vi kommit överens om vid det veckomöte vi ska hålla.
+** Arbetsuppgifter:**
+| Namn | Analysfråga | Ansvar / fil | Status |
+|------|-------------|--------------|--------|
+| _Namn 1_ | Vad säljer vi? | `io_utils.py` | ÖPPNA |
+| _Namn 2_ | Var säljer vi? | `metrics.py` | ÖPPNA |
+| _Namn 3_ | När säljer vi? | `viz.py` | ÖPPNA |
+| _Namn 4_ | Hur ser en typisk order ut? | `ecommerce.py` | ÖPPNA |
+| _Namn 5_ | Topp-listor  | `metrics.py` | ÖPPNA |
+| _Namn 6_ | Eventuella avvikelser | `report.ipynb` | ÖPPNA |
+
+Obs. 
+1) Detta ska fastställas och senare uppdateras. Var och en kommer att ange sitt namn och sin roll eller sitt ansvarsområde i enlighet med vad vi kommit överens om vid det veckomöte vi ska hålla.
+
+2) En filansvarig för de delade filerna betyder inte att filansvarig skriver all kod utan bara håller filen konsekvent (namngivning, docstrings, inga dubbletter av funktioner) och granskar PR som rör den.
