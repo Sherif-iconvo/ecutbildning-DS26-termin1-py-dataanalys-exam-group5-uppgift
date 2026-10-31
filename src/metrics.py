@@ -65,5 +65,6 @@ if __name__ == "__main__":
 
     print("\nRevenue by category:")
     print(revenue_by_category(df))
-        .reset_index()
-    )
+
+    
+print(revenue_by_category(df).reset_index())
