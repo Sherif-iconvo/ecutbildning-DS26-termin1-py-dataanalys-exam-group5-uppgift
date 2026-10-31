@@ -38,6 +38,7 @@ def revenue_by_category(df: pd.DataFrame) -> pd.Series:
         sorted in descending order.
     """
 
+def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
     return (
         df.groupby("category")["revenue"]
         .sum()
@@ -64,3 +65,5 @@ if __name__ == "__main__":
 
     print("\nRevenue by category:")
     print(revenue_by_category(df))
+        .reset_index()
+    )
