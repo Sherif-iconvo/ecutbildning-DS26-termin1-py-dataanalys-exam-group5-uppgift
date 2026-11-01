@@ -142,3 +142,16 @@ def plot_city_trends(city_performance: pd.DataFrame, figsize: tuple[int, int] = 
     return fig
 
 ## slutet på Sherifs figurer för fråga (3).
+
+# Edvins Figuror:
+def bar(ax, x, y, title, xlabel, ylabel, grid: bool = True):
+    x = x
+    y = y
+    ax.bar(x,y)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.grid(grid, axis="y")
+    return ax
+
+## slutet på Edvins figurer
