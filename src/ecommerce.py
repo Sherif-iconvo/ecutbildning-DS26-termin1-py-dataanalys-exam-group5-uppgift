@@ -70,3 +70,7 @@ class EcommerceAnalyzer:
     
 
     # --- Visualization Delegation ---
+
+    # --- Mahmouds fråga (6): Eventuella avvikelser ---
+    def identify_outliers(self, column: str) -> tuple[pd.DataFrame, float, float]:
+        return metrics.identify_outliers(self.df, column)
