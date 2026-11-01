@@ -126,3 +126,27 @@ def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
         .sort_values(ascending=False)
         .reset_index()
     )
+
+# Identify outliers in a DataFrame column using the IQR method for question 6.
+
+def identify_outliers(df: pd.DataFrame, column: str) -> tuple[pd.DataFrame, float, float]:
+    """
+    Parameters:
+    df (pd.DataFrame): The input DataFrame.
+    column (str): The name of the column to check for outliers.
+    
+    Returns:
+    tuple: (outliers, lower_bound, upper_bound)
+        outliers (pd.DataFrame): Rows containing outliers.
+        lower_bound (float): Lower IQR threshold.
+        upper_bound (float): Upper IQR threshold.
+    """
+    Q1 = df[column].quantile(0.25)
+    Q3 = df[column].quantile(0.75)
+    IQR = Q3 - Q1
+    lower_bound = Q1 - 1.5 * IQR
+    upper_bound = Q3 + 1.5 * IQR
+    
+    outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
+    
+    return outliers, lower_bound, upper_bound
