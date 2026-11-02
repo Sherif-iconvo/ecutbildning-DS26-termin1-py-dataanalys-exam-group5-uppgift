@@ -1,3 +1,4 @@
+
 """
 src/viz.py
 
@@ -5,6 +6,7 @@ Visualiseringsmodul för e-commerce.py -> report.ipynb.
 Alla funktioner returnerar ett matplotlib.figure.Figure-objekt och stänger
 figuren internt (plt.close(fig)) för att förhindra dubbla utskrifter i Jupyter.
 """
+
 import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
@@ -155,3 +157,11 @@ def bar(ax, x, y, title, xlabel, ylabel, grid: bool = True):
     return ax
 
 ## slutet på Edvins figurer
+
+# Henrik Figuror:
+def pie_chart_top3(ax, x, y, title, legend_title=None):
+    ax.pie(y, autopct="%1.1f%%")
+    ax.legend(x, title=legend_title, loc="center left", bbox_to_anchor=(1, 0.5))
+    ax.set_title(title)
+    
+## slutet på Henrik figurer
