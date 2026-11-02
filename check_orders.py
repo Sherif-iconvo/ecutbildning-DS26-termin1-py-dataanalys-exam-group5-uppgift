@@ -1,3 +1,5 @@
+ #fråga 4 Kontrollera hur order representeras i datan issue 23
+
 # Hämta funktion för att läsa rådata.
 from src.io_utils import load_raw_transactions
 
