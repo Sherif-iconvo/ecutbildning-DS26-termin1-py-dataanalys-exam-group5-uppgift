@@ -186,7 +186,6 @@ if __name__ == "__main__":
     print(revenue_by_category(df))
 
     
-print("\nRevenue by category:")
-print(revenue_by_category(df))
-print(revenue_by_category(df).reset_index())
-reset_index()
+    print("\nRevenue by category:")
+    print(revenue_by_category(df))
+    print(revenue_by_category(df).reset_index())
