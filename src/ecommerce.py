@@ -73,9 +73,6 @@ class EcommerceAnalyzer:
 
     # --- Visualization Delegation ---
 
-    # --- Mahmouds fråga (6): Eventuella avvikelser ---
-    def identify_outliers(self, column: str) -> tuple[pd.DataFrame, float, float]:
-        return metrics.identify_outliers(self.df, column)
     # --- Visualization Delegation-metoder ---
     def plot_weekday_overview(self) -> plt.figure:
         return viz.plot_weekday_overview(self.weekday_revenue_summary())
@@ -91,3 +88,18 @@ class EcommerceAnalyzer:
 
     def plot_city_trends(self) -> plt.figure:
         return viz.plot_city_trends(self.city_performance(by_month=True))
+    
+    # --- Mahmouds fråga (6): Eventuella avvikelser ---
+
+    def identify_outliers(self, column: str) -> tuple[pd.DataFrame, float, float]:
+            return metrics.identify_outliers(self.df, column)
+    
+    def plot_outliers_boxplot(self, column):
+            return viz.plot_outliers_boxplot(self.df, column)
+
+    def plot_outliers_by_group(self, column, group_column):
+            outliers, lower_bound, upper_bound = self.identify_outliers(column)
+
+            return viz.plot_outliers_by_group(
+             self.df, outliers, group_column
+    )

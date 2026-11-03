@@ -165,3 +165,38 @@ def pie_chart_top3(ax, x, y, title, legend_title=None):
     ax.set_title(title)
     
 ## slutet på Henrik figurer
+
+def plot_outliers_boxplot(df, column):
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    ax.boxplot(df[column].dropna())
+
+    ax.set_title(f"Fördelning och avvikande värden - {column}")
+    ax.set_ylabel("Ordervärde")
+    ax.set_xticks([1])
+    ax.set_xticklabels([column])
+    ax.grid(axis="y", alpha=0.3)
+
+    plt.close(fig)
+    return fig
+
+
+def plot_outliers_by_group(df, outliers, group_column):
+    total = df[group_column].value_counts()
+    counts = outliers[group_column].value_counts()
+
+    percentage = (counts / total) * 100
+    percentage = percentage.fillna(0)
+    percentage = percentage.sort_values(ascending=False)
+
+    fig, ax = plt.subplots(figsize=(8, 5))
+
+    ax.bar(percentage.index, percentage.values)
+
+    ax.set_title(f"Avvikande värden per {group_column}")
+    ax.set_xlabel(group_column)
+    ax.set_ylabel("Andel avvikande värden (%)")
+    ax.grid(axis="y", alpha=0.3)
+
+    plt.close(fig)
+    return fig
