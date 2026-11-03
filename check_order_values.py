@@ -1,6 +1,8 @@
 # Hämta Sherifs inläsning och din funktion för ordervärden.
 from src.io_utils import load_and_clean_transactions
-from src.metrics import order_values
+
+# Hämta orderfunktionen från din egen AOV-fil.
+from aov_issue41 import order_values
 
 # Läs in och rensa datan.
 df = load_and_clean_transactions()

@@ -1,7 +1,12 @@
 # Hämta Sherifs funktion
 
 from src.io_utils import load_and_clean_transactions
-from src.metrics import order_values
+
+def order_values(df):
+    """Beräkna totalt ordervärde per order."""
+
+    # Summera intäkten för varje order-ID.
+    return df.groupby("order_id")["revenue"].sum()
 
 
 def aov_and_units(df):
