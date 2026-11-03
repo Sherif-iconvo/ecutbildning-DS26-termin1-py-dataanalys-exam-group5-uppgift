@@ -99,6 +99,7 @@ class EcommerceAnalyzer:
     
 
     # --- Visualization Delegation ---
+
     # --- Visualization Delegation-metoder ---
     def plot_weekday_overview(self) -> plt.figure:
         return viz.plot_weekday_overview(self.weekday_revenue_summary())
@@ -114,3 +115,8 @@ class EcommerceAnalyzer:
 
     def plot_city_trends(self) -> plt.figure:
         return viz.plot_city_trends(self.city_performance(by_month=True))
+
+# --- Ona fråga 2 ---
+        
+    def plot_city_revenue_bar(self) -> plt.figure:
+        return viz.plot_city_revenue_bar(self.city_performance())
