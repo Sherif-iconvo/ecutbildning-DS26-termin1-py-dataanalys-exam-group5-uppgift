@@ -67,7 +67,7 @@ class EcommerceAnalyzer:
 
     # --- Metrics Delegation-metoder---
     # --- Edvins fråga (1): Vad säljer? ---
-    def revenue_by_category(self):
+    def revenue_by_category(self) -> pd.DataFrame:
         return metrics.revenue_by_category(self.df)
     
     # --- Sherifs fråga (3): När säljer vi? ---
@@ -104,6 +104,10 @@ class EcommerceAnalyzer:
     # --- Visualization Delegation ---
 
     # --- Visualization Delegation-metoder ---
+
+    def plot_revenue_by_category(self, ax, categories, revenue, title, xlabel, ylabel) -> plt.figure:
+        return viz.bar(ax,categories, revenue, title, xlabel, ylabel)
+    
     def plot_weekday_overview(self) -> plt.figure:
         return viz.plot_weekday_overview(self.weekday_revenue_summary())
 
