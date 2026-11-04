@@ -1,183 +1,158 @@
 import pandas as pd
-import matplotlib.pyplot as plt
 
-def revenue_by_category(df: pd.DataFrame) -> pd.Series:
+#function to get the top 3 catagories and sort them
+def top_catagories(df: pd.DataFrame) -> pd.DataFrame:
+    return(
+        df.groupby("category", dropna=False)["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    )
+"""
+src/metrics.py
+
+Tillhandahåller analytiska funktioner för bearbetning av e-handelstransaktionsdata.
+(Förutsatt att indata-DataFrame redan har rengjorts av io_utils.py).
+
+> Sherif fråga (3) nyckeltals-funktioner:
+- date_range(): Returnerar det tidigaste och senaste beställningsdatumet i datamängden.
+- orders_per_weekday(): Antal ordrar per veckodag, sorterat måndag -> söndag.
+- orders_per_month(): Antal ordrar per kalendermånad.
+- weekly_revenue_summary(): Total intäkt per vecka.
+- weekday_revenue_summary(): Intäkt per veckodag: summa, medelvärde (AOV) och antal ordrar.
+- monthly_revenue_summary(): Beräkna månatlig intäktsöversiktsstatistik: summa, medelvärde och orderantal.
+- category_performance(): Intäkt, enheter och antal ordrar per kategori. by_month=True grupperar per månad och kategori.
+- city_performance(): Intäkt, enheter och AOV per stad. by_month=True grupperar per månad och stad.
+- monthly_revenue_change(): Beräkna totala månatliga intäkter och procentuell förändring från månad till månad (MoM %)
+> slutet på Sherifs fråga (3) nyckeltals-funktioner.
+
+"""
+
+
+import pandas as pd
+
+# Sherif fråga (3) nyckeltals-funktioner:
+def date_range(df: pd.DataFrame) -> tuple[pd.Timestamp, pd.Timestamp]:           # period covered
+    return df["date"].min(), df["date"].max()            
+
+def orders_per_weekday(df: pd.DataFrame) -> pd.Series:
+    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",]
+    weekday_orders = df["date"].dt.day_name().value_counts().reindex(weekdays)   # orders per weekday
+    weekday_orders.name = "weekday_orders"
+    return weekday_orders
+
+
+def orders_per_month(df: pd.DataFrame) -> pd.Series:                            
+    df_temp = df.copy()
+    df_temp["period"] = df_temp["date"].dt.to_period("M")
+    monthly_orders = df_temp["period"].value_counts().sort_index()               # orders per month
+    monthly_orders.name = "month_orders"
+    return monthly_orders
+
+
+def weekly_revenue_summary(df: pd.DataFrame) -> pd.Series:                       # total revenue per week (Mon–Sun)
+    return df.set_index("date")["revenue"].resample("W").sum()
+
+
+def weekday_revenue_summary(df: pd.DataFrame) -> pd.DataFrame:                       # Calculate weekday revenue summary: sum, mean, and order count
+    weekdays = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday",]
+    df_temp = df.copy()
+    df_temp["weekday"] = df_temp["date"].dt.day_name()
+    weekdays_rev_summary = df_temp.groupby("weekday")["revenue"].agg(["sum", "mean", "count"]).reindex(weekdays)
+    weekdays_rev_summary["mean"] = weekdays_rev_summary["mean"].round(2)
+    return weekdays_rev_summary
+
+
+def monthly_revenue_summary(df: pd.DataFrame) -> pd.DataFrame:                   # sum: total revenue per month/ mean: average order value (AOV) per month / count: orders per month
+    df_temp = df.copy()
+    df_temp["period"] = df_temp["date"].dt.to_period("M")
+    monthly = df_temp.groupby(df_temp["period"])["revenue"].agg(["sum", "mean", "count"]) 
+    monthly["mean"] = monthly["mean"].round(2)
+    return monthly
+
+
+def monthly_revenue_change(df: pd.DataFrame) -> pd.DataFrame:                    # % change from previous month
+    monthly = monthly_revenue_summary(df)
+    monthly["pct_change"] = (monthly["sum"].pct_change() * 100).round(1)     # % change from previous month
+    return monthly
+
+
+def category_performance(df: pd.DataFrame, by_month: bool = False) -> pd.DataFrame:
+    df_temp = df.copy()
+    if by_month:                                                                  # total revenue, units sold, and order count per product category per month
+        df_temp["period"] = df_temp["date"].dt.to_period("M")
+        group_cols = ["period", "category"]
+        sort_values_by = ["period", "total_revenue"]
+        ascending_arr = [True, False]
+    else:                                                                         # total revenue, units sold, and order count per product category
+        group_cols = ["category"]
+        sort_values_by = ["total_revenue"]
+        ascending_arr = [False]
+
+    result = (df_temp.groupby(group_cols)                    
+                       .agg
+                       (
+                           total_revenue = ("revenue", "sum"), 
+                           units_sold = ("units", "sum"), 
+                           order_count = ("order_id", "count"),
+                           )
+                           .sort_values(by=sort_values_by, ascending=ascending_arr)
+                    )
+    
+    return result
+
+
+def city_performance(df: pd.DataFrame, by_month: bool = False) -> pd.DataFrame:
+    df_temp = df.copy()
+    if by_month:                                                                    # total revenue, units sold, and average order value per product city per month
+        df_temp["period"] = df_temp["date"].dt.to_period("M")
+        group_cols = ["period", "city"]
+        sort_values_by = ["period", "total_revenue"]
+        ascending_arr = [True, False]
+    else:                                                                           # total revenue, units sold, and average order value per product city
+        group_cols = ["city"]
+        sort_values_by = ["total_revenue"]
+        ascending_arr = [False]
+
+    result = (df_temp.groupby(group_cols)                    
+                       .agg
+                       (
+                           total_revenue = ("revenue", "sum"), 
+                           units_sold = ("units", "sum"), 
+                           aov = ("revenue", "mean"),
+                           )
+                           .sort_values(by=sort_values_by, ascending=ascending_arr)
+                    )
+    
+    return result
+
+# slutet på Sherifs fråga (3) nyckeltals-funktioner.
+import pandas as pd
+
+def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
     return (
         df.groupby("category")["revenue"]
         .sum()
         .sort_values(ascending=False)
-        .head(3)
+        .reset_index()
     )
+def aov_and_units(df):
+    """Beräkna AOV, antal order och antal sålda enheter."""
+    orders = df["revenue"]  # En rad per order i vår data.
+    order_count = len(orders)
+
+    if order_count == 0:
+        raise ValueError("Kan inte beräkna AOV utan order.")
+
+    aov = orders.sum() / order_count
+    return aov, order_count, df["units"].sum()
 
 
-def clean_data(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Rensar datasetet från saknade värden och dubletter.
-    """
-
-    df = df.drop_duplicates()
-    df = df.dropna()
-
-    return df
+def sales_totals(df):
+    """Beräkna antal sålda enheter och total intäkt."""
+    return df["units"].sum(), df["revenue"].sum()
 
 
-def check_data_quality(df: pd.DataFrame) -> None:
-    """
-    Kontrollerar saknade och ovanliga värden.
-    """
-
-    print("\nMissing values per column:")
-    print(df.isnull().sum())
-
-    print("\nNegative revenues:")
-    print((df["revenue"] < 0).sum())
-
-    print("\nNegative units:")
-    print((df["units"] < 0).sum())
-
-def calculate_order_value(df: pd.DataFrame) -> pd.DataFrame:
-    """
-    Beräknar ordervärde per order.
-    """
-
-    df["calculated_revenue"] = df["price"] * df["units"]
-
-    return df
-
-
-def revenue_by_city(df: pd.DataFrame) -> pd.Series:
-    """
-    Beräknar total intäkt per stad.
-    """
-
-    return (
-        df.groupby("city")["revenue"]
-        .sum()
-        .sort_values(ascending=False)
-    )
-
-def revenue_by_month(df: pd.DataFrame) -> pd.Series:
-    """
-    Beräknar total intäkt per månad.
-    """
-
-    df = df.copy()
-
-    df["date"] = pd.to_datetime(df["date"])
-
-    monthly_revenue = (
-        df.groupby(df["date"].dt.month)["revenue"]
-        .sum()
-    )
-
-    return monthly_revenue
-
-def plot_revenue_by_city(city_revenue: pd.Series) -> None:
-    """
-    Skapar ett stapeldiagram för försäljning per stad.
-    """
-
-    plt.figure(figsize=(8, 5))
-
-    city_revenue.plot(
-        kind="bar",
-        color="skyblue"
-    )
-
-    plt.title("Revenue by City")
-    plt.xlabel("City")
-    plt.ylabel("Revenue")
-
-    plt.tight_layout()
-
-    plt.show()
-
-def plot_revenue_by_category(category_revenue: pd.Series) -> None:
-    """
-    Skapar ett stapeldiagram för försäljning per kategori.
-    """
-
-    plt.figure(figsize=(8, 5))
-
-    category_revenue.plot(
-        kind="bar",
-        color="lightgreen"
-    )
-
-    plt.title("Revenue by Category")
-    plt.xlabel("Category")
-    plt.ylabel("Revenue")
-
-    plt.tight_layout()
-
-    plt.show()
-
-
-def plot_revenue_by_month(monthly_revenue: pd.Series) -> None:
-    """
-    Visualiserar intäkter över tid.
-    """
-
-    plt.figure(figsize=(8, 5))
-
-    monthly_revenue.plot(
-        kind="line",
-        marker="o",
-        color="purple"
-    )
-
-    plt.title("Revenue by Month")
-    plt.xlabel("Month")
-    plt.ylabel("Revenue")
-
-    plt.grid(True)
-
-    plt.tight_layout()
-
-    plt.show()
-
-
-if __name__ == "__main__":
-    from io_utils import load_data
-
-    df = load_data()
-
-    print("Rows before cleaning:", len(df))
-
-    df = clean_data(df)
-
-    print("Rows after cleaning:", len(df))
-
-    check_data_quality(df)
-
-df = calculate_order_value(df)
-
-print(
-    df[
-        ["order_id", "price", "units", "revenue", "calculated_revenue"]
-    ].head()
-)
-
-city_revenue = revenue_by_city(df)
-
-print("\nRevenue by city:")
-
-print(city_revenue)
-
-plot_revenue_by_city(city_revenue)
-
-category_revenue = revenue_by_category(df)
-
-print("\nTop categories:")
-
-print(category_revenue)
-
-plot_revenue_by_category(category_revenue)
-
-monthly_revenue = revenue_by_month(df)
-
-print("\nRevenue by month:")
-
-print(monthly_revenue)
-
-plot_revenue_by_month(monthly_revenue)
+def order_value_spread(df):
+    """Visa hur ordervärdena varierar."""
+    return df["revenue"].describe()
