@@ -6,5 +6,6 @@ def top_catagories(df: pd.DataFrame) -> pd.DataFrame:
         df.groupby("category", dropna=False)["revenue"]
         .sum()
         .sort_values(ascending=False)
+        .head(3)
         .reset_index()
     )
