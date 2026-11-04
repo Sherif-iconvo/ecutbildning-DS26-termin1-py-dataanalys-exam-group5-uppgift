@@ -1,3 +1,13 @@
+import pandas as pd
+
+#function to get the top 3 catagories and sort them
+def top_catagories(df: pd.DataFrame) -> pd.DataFrame:
+    return(
+        df.groupby("category", dropna=False)["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    )
 """
 src/metrics.py
 
@@ -162,30 +172,25 @@ def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
         df.groupby("category")["revenue"]
         .sum()
         .sort_values(ascending=False)
+        .reset_index()
     )
+def aov_and_units(df):
+    """Beräkna AOV, antal order och antal sålda enheter."""
+    orders = df["revenue"]  # En rad per order i vår data.
+    order_count = len(orders)
 
-def revenue_by_city(df: pd.DataFrame) -> pd.Series:
-    """
-    Calculate total revenue per city.
-    """
+    if order_count == 0:
+        raise ValueError("Kan inte beräkna AOV utan order.")
 
-    return (
-        df.groupby("city")["revenue"]
-        .sum()
-        .sort_values(ascending=False)
-    )
+    aov = orders.sum() / order_count
+    return aov, order_count, df["units"].sum()
 
-if __name__ == "__main__":
-    from io_utils import load_data
 
-    df = load_data()
+def sales_totals(df):
+    """Beräkna antal sålda enheter och total intäkt."""
+    return df["units"].sum(), df["revenue"].sum()
 
-    check_data_quality(df)
 
-    print("\nRevenue by category:")
-    print(revenue_by_category(df))
-
-    
-    print("\nRevenue by category:")
-    print(revenue_by_category(df))
-    print(revenue_by_category(df).reset_index())
+def order_value_spread(df):
+    """Visa hur ordervärdena varierar."""
+    return df["revenue"].describe()
