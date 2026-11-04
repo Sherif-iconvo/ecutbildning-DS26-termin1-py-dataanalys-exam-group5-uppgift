@@ -93,6 +93,11 @@ class EcommerceAnalyzer:
         return metrics.monthly_revenue_change(self.df)
 
 
+    # --- Henriks fråga (3): Top-3 kategorier ---
+
+    def top_catagories(self) -> pd.DataFrame:
+        return metrics.top_catagories(self.df)
+
     # --- Sherifs fråga (1-2 + tid/månad): Vad säljer vi? / Var säljer vi? ---
     def category_performance(self, by_month: bool = False) -> pd.DataFrame:
         return metrics.category_performance(self.df, by_month)
@@ -123,6 +128,8 @@ class EcommerceAnalyzer:
     def plot_city_trends(self) -> plt.figure:
         return viz.plot_city_trends(self.city_performance(by_month=True))
 
+    def pie_chart_top3(self) -> plt.Figure:
+        return viz.pie_chart_top3(self.top_catagories())
 # --- Ona fråga 2 ---
         
     def plot_city_revenue_bar(self) -> plt.figure:
