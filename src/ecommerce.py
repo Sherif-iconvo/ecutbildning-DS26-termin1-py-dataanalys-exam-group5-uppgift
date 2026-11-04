@@ -1,3 +1,30 @@
+import pandas as pd
+
+
+class EcommerceAnalyzer:
+    """
+    Klass för analys av e-handelsdata.
+    """
+
+    def __init__(self, df: pd.DataFrame):
+        self.df = df
+
+    def get_total_revenue(self) -> float:
+        """
+        Calculate and return the total revenue.
+        """
+        return self.df["revenue"].sum()
+
+
+if __name__ == "__main__":
+    from io_utils import load_data
+
+    df = load_data()
+
+    analyzer = EcommerceAnalyzer(df)
+
+    print("Total revenue:")
+    print(analyzer.get_total_revenue())
 """
 Kärnklass som samordnar inläsning och rensning av data samt analys av ecommerce transaktionsdata, genom att tillhandahålla delegeringsmetoder för mätetal och visualisering.
 __init__: Initierar analysatorn genom att läsa in och rensa transaktionsdata. Alla andra metoder i klassen kan nu komma åt exakt samma datamängd genom att referera till `self.df`, utan att behöva läsa in eller rensa filen från disken på nytt.
@@ -40,7 +67,7 @@ class EcommerceAnalyzer:
 
     # --- Metrics Delegation-metoder---
     # --- Edvins fråga (1): Vad säljer? ---
-    def revenue_by_category(self):
+    def revenue_by_category(self) -> pd.DataFrame:
         return metrics.revenue_by_category(self.df)
     
     # --- Sherifs fråga (3): När säljer vi? ---
@@ -79,7 +106,13 @@ class EcommerceAnalyzer:
         return  metrics.city_performance(self.df, by_month)
     
 
+    # --- Visualization Delegation ---
+
     # --- Visualization Delegation-metoder ---
+
+    def plot_revenue_by_category(self, ax, categories, revenue, title, xlabel, ylabel) -> plt.figure:
+        return viz.bar(ax,categories, revenue, title, xlabel, ylabel)
+    
     def plot_weekday_overview(self) -> plt.figure:
         return viz.plot_weekday_overview(self.weekday_revenue_summary())
 
@@ -97,3 +130,7 @@ class EcommerceAnalyzer:
 
     def pie_chart_top3(self) -> plt.Figure:
         return viz.pie_chart_top3(self.top_catagories())
+# --- Ona fråga 2 ---
+        
+    def plot_city_revenue_bar(self) -> plt.figure:
+        return viz.plot_city_revenue_bar(self.city_performance())
