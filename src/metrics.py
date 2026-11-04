@@ -1,3 +1,13 @@
+import pandas as pd
+
+#function to get the top 3 catagories and sort them
+def top_catagories(df: pd.DataFrame) -> pd.DataFrame:
+    return(
+        df.groupby("category", dropna=False)["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    )
 """
 src/metrics.py
 
@@ -17,9 +27,6 @@ Tillhandahåller analytiska funktioner för bearbetning av e-handelstransaktions
 > slutet på Sherifs fråga (3) nyckeltals-funktioner.
 
 """
-
-
-import pandas as pd
 
 # Sherif fråga (3) nyckeltals-funktioner:
 def date_range(df: pd.DataFrame) -> tuple[pd.Timestamp, pd.Timestamp]:           # period covered
@@ -117,9 +124,16 @@ def city_performance(df: pd.DataFrame, by_month: bool = False) -> pd.DataFrame:
     return result
 
 # slutet på Sherifs fråga (3) nyckeltals-funktioner.
-import pandas as pd
+    
 
 def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate total revenue per category.
+    
+    Returns:
+        pd.Series: Revenue grouped by category,
+        sorted in descending order.
+    """
     return (
         df.groupby("category")["revenue"]
         .sum()
@@ -151,3 +165,38 @@ def identify_outliers(df: pd.DataFrame, column: str) -> tuple[pd.DataFrame, floa
     
     return outliers, lower_bound, upper_bound
 # slutet på Mahmoud fråga (6) avvikelser.
+
+
+def revenue_by_city(df: pd.DataFrame) -> pd.Series:
+    """
+    Calculate total revenue per city.
+    """
+
+    return (
+        df.groupby("city")["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+
+def aov_and_units(df):
+    """Beräkna AOV, antal order och antal sålda enheter."""
+    orders = df["revenue"]  # En rad per order i vår data.
+    order_count = len(orders)
+
+    if order_count == 0:
+        raise ValueError("Kan inte beräkna AOV utan order.")
+
+    aov = orders.sum() / order_count
+    return aov, order_count, df["units"].sum()
+
+
+def sales_totals(df):
+    """Beräkna antal sålda enheter och total intäkt."""
+    return df["units"].sum(), df["revenue"].sum()
+
+
+def order_value_spread(df):
+    """Visa hur ordervärdena varierar."""
+    return df["revenue"].describe()
+
+

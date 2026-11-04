@@ -1,4 +1,3 @@
-
 """
 src/viz.py
 
@@ -202,3 +201,24 @@ def plot_outliers_by_group(df, outliers, group_column):
     plt.close(fig)
     return fig
 # slutet på Mahmouds figurer
+
+
+# --- Onas tillägg: Stapeldiagram för stadsförsäljning ---
+def plot_city_revenue_bar(city_perf: pd.DataFrame, figsize: tuple[int, int] = (8, 5)) -> plt.figure:
+    """
+    Skapar ett stapeldiagram för total intäkt per stad (Ona-del).
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    ax.bar(city_perf.index, city_perf["total_revenue"], color="skyblue", edgecolor="navy", alpha=0.8)
+    ax.set_title("Total intäkt per stad", fontsize=12, fontweight="bold", pad=10)
+    ax.set_xlabel("Stad", fontsize=10)
+    ax.set_ylabel("Total Intäkt (SEK)", fontsize=10)
+    
+    ax.grid(True, axis="y", linestyle="--", alpha=0.7)
+    ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
+    plt.xticks(rotation=15, ha="right")
+    
+    fig.tight_layout()
+    plt.close(fig)
+    return fig

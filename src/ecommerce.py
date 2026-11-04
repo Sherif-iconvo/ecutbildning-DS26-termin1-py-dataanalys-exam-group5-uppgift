@@ -1,3 +1,30 @@
+import pandas as pd
+
+
+class EcommerceAnalyzer:
+    """
+    Klass för analys av e-handelsdata.
+    """
+
+    def __init__(self, df: pd.DataFrame):
+        self.df = df
+
+    def get_total_revenue(self) -> float:
+        """
+        Calculate and return the total revenue.
+        """
+        return self.df["revenue"].sum()
+
+
+if __name__ == "__main__":
+    from io_utils import load_data
+
+    df = load_data()
+
+    analyzer = EcommerceAnalyzer(df)
+
+    print("Total revenue:")
+    print(analyzer.get_total_revenue())
 """
 Kärnklass som samordnar inläsning och rensning av data samt analys av ecommerce transaktionsdata, genom att tillhandahålla delegeringsmetoder för mätetal och visualisering.
 __init__: Initierar analysatorn genom att läsa in och rensa transaktionsdata. Alla andra metoder i klassen kan nu komma åt exakt samma datamängd genom att referera till `self.df`, utan att behöva läsa in eller rensa filen från disken på nytt.
@@ -39,7 +66,10 @@ class EcommerceAnalyzer:
         self.df: pd.DataFrame = load_and_clean_transactions(filepath)   # the cleaned DataFrame is assigned to self.df. This makes the cleaned dataset persist in memory for as long as your object exists.
 
     # --- Metrics Delegation-metoder---
-
+    # --- Edvins fråga (1): Vad säljer? ---
+    def revenue_by_category(self):
+        return metrics.revenue_by_category(self.df)
+    
     # --- Sherifs fråga (3): När säljer vi? ---
     def date_range(self) -> tuple[pd.Timestamp, pd.Timestamp]: 
         return metrics.date_range(self.df)
@@ -103,3 +133,8 @@ class EcommerceAnalyzer:
             return viz.plot_outliers_by_group(
              self.df, outliers, group_column
     )
+
+# --- Ona fråga 2 ---
+        
+    def plot_city_revenue_bar(self) -> plt.figure:
+        return viz.plot_city_revenue_bar(self.city_performance())
