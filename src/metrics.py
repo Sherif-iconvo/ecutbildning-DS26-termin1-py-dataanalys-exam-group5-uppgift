@@ -189,3 +189,23 @@ if __name__ == "__main__":
     print("\nRevenue by category:")
     print(revenue_by_category(df))
     print(revenue_by_category(df).reset_index())
+def aov_and_units(df):
+    """Beräkna AOV, antal order och antal sålda enheter."""
+    orders = df["revenue"]  # En rad per order i vår data.
+    order_count = len(orders)
+
+    if order_count == 0:
+        raise ValueError("Kan inte beräkna AOV utan order.")
+
+    aov = orders.sum() / order_count
+    return aov, order_count, df["units"].sum()
+
+
+def sales_totals(df):
+    """Beräkna antal sålda enheter och total intäkt."""
+    return df["units"].sum(), df["revenue"].sum()
+
+
+def order_value_spread(df):
+    """Visa hur ordervärdena varierar."""
+    return df["revenue"].describe()
