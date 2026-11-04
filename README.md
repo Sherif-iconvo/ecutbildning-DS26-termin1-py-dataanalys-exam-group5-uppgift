@@ -15,7 +15,7 @@ Vi är analysteamet på en fiktiv e-handelsplattform. Ledningen vill ha ett snab
 
 Notebooken avslutas med rubriken **Rekommendationer** med 2–3 rekommendationer baserade på resultaten.
 
-**Dataset:** `data/ecommerce_sales.csv`
+**Dataset:** `../data/ecommerce_sales.csv`
 Kolumner: `order_id`, `date`, `city`, `category`, `price`, `units`, `revenue`
 
 ## Projektstruktur
@@ -33,11 +33,6 @@ Kolumner: `order_id`, `date`, `city`, `category`, `price`, `units`, `revenue`
 ├── requirements.txt
 └── README.md
 ```
-
-## Krav
-
-- **Python 3.14** (utvecklat med Python 3.14.7)
-- Paketen i `requirements.txt` (främst pandas, matplotlib, jupyter/ipykernel, seaborn, numpy)
 
 ## Så kör du projektet
 
@@ -79,16 +74,67 @@ Kolumner: `order_id`, `date`, `city`, `category`, `price`, `units`, `revenue`
 | Sherif Khairallah | Repo, miljö, README | klar |
 
 ** Arbetsuppgifter:**
-| Namn | Analysfråga | Ansvar / fil | Status |
-|------|-------------|--------------|--------|
-| _Namn 1_ | Vad säljer vi? | `io_utils.py` | ÖPPNA |
-| _Namn 2_ | Var säljer vi? | `metrics.py` | ÖPPNA |
-| _Namn 3_ | När säljer vi? | `viz.py` | ÖPPNA |
-| _Namn 4_ | Hur ser en typisk order ut? | `ecommerce.py` | ÖPPNA |
-| _Namn 5_ | Topp-listor  | `metrics.py` | ÖPPNA |
-| _Namn 6_ | Eventuella avvikelser | `report.ipynb` | ÖPPNA |
+| Namn | Analysfråga | Status |
+|------|-------------|--------|
+| _Edvin_ | Vad säljer vi? | ÖPPNA |
+| _Ona_ | Var säljer vi? |  ÖPPNA |
+| _Sherif_ | När säljer vi? | klar |
+| _Bezabeh_ | Hur ser en typisk order ut? | ÖPPNA |
+| _Henrik_ | Topp-listor  | ÖPPNA |
+| _Mahmoud_ | Eventuella avvikelser | ÖPPNA |
 
 Obs. 
 1) Detta ska fastställas och senare uppdateras. Var och en kommer att ange sitt namn och sin roll eller sitt ansvarsområde i enlighet med vad vi kommit överens om vid det veckomöte vi ska hålla.
 
 2) En filansvarig för de delade filerna betyder inte att filansvarig skriver all kod utan bara håller filen konsekvent (namngivning, docstrings, inga dubbletter av funktioner) och granskar PR som rör den.
+
+
+## Miljö
+
+- **Python:** 3.14 (utvecklat och testat med Python 3.14.7)
+- **Paket:** alla med exakta versioner i `requirements.txt`. De viktigaste:
+
+| Paket | Version | Används till |
+|-------|---------|--------------|
+| pandas | 3.0.6 | inläsning, rensning och beräkning av nyckeltal |
+| numpy | 2.5.4 | numeriska beräkningar (t.ex. konsistenskontroll av intäkt) |
+| matplotlib | 3.11.2 | diagram i `src/viz.py` |
+| jupyter / ipykernel | 1.1.1 / 7.4.0 | köra `notebooks/report.ipynb` |
+
+Installera allt med `pip install -r requirements.txt` (se *Så kör du projektet*).
+
+
+## Nyckeltal
+
+Alla nyckeltal beräknas i `src/metrics.py` på den rensade datan och nås via klassen `EcommerceAnalyzer`.
+
+| Nyckeltal | Definition | Används för |
+|-----------|------------|-------------|
+| **Total intäkt** | Summan av `revenue` | Totalnivå, per kategori/stad/period |
+| **Antal ordrar** | Antal unika `order_id` | Efterfrågan per period |
+| **AOV** (Average Order Value) | Total intäkt / antal ordrar | Hur stor en typisk order är |
+| **Förändring mot föregående månad (MoM %)** | (månad − föregående månad) / föregående månad × 100 | Trender och dippar |
+| **Andel av intäkt** | Gruppens intäkt / total intäkt | T.ex. städernas betydelse |
+| **Sålda enheter** | Summan av `units` | Volym per kategori/stad |
+
+Här följer nyckeltal värdena (från notebooken, efter lätt städning):
+
+- **Total intäkt & AOV & Förändring mot föregående månad (MoM %):**
+månatliga intäkter och procentuell förändring från månad till månad (MoM %):
+               sum     mean  count  pct_change
+period                                        
+2024-01  664083.32  1492.32    445         NaN
+2024-02  548462.03  1536.31    357       -17.4
+2024-03  487602.00  1186.38    411       -11.1
+2024-04  580194.83  1343.04    432        19.0
+2024-05  632165.16  1459.97    433         9.0
+2024-06  590259.89  1398.72    422        -6.6
+
+- **Total antal orders:** 2500
+- **Genomsnittlig sålda enheter:** 2.99
+
+- ** Andel av intäkt & Sålda enheter (per kategori/stad):**
+
+
+
+### Figurer
