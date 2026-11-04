@@ -1,3 +1,13 @@
+import pandas as pd
+
+#function to get the top 3 catagories and sort them
+def top_catagories(df: pd.DataFrame) -> pd.DataFrame:
+    return(
+        df.groupby("category", dropna=False)["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+        .reset_index()
+    )
 """
 src/metrics.py
 
@@ -147,3 +157,6 @@ def revenue_by_city(df: pd.DataFrame) -> pd.Series:
         .sort_values(ascending=False)
     )
 
+def order_value_spread(df):
+    """Visa hur ordervärdena varierar."""
+    return df["revenue"].describe()
