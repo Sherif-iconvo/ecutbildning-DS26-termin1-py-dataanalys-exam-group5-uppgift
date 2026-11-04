@@ -126,44 +126,6 @@ def city_performance(df: pd.DataFrame, by_month: bool = False) -> pd.DataFrame:
 # slutet på Sherifs fråga (3) nyckeltals-funktioner.
     
 
-
-def check_data_quality(df: pd.DataFrame) -> None:
-    """
-    Check data quality in the dataset.
-
-    Checks:
-    - Missing values
-    - Duplicate rows
-    - Negative prices
-    - Negative units
-    - Negative revenue values
-    """
-
-    print("Missing values:")
-    print(df.isnull().sum())
-
-    print("\nDuplicate rows:")
-    print(df.duplicated().sum())
-
-    print("\nNegative prices:")
-    print((df["price"] < 0).sum())
-
-    print("\nNegative units:")
-    print((df["units"] < 0).sum())
-
-    print("\nNegative revenue:")
-    print((df["revenue"] < 0).sum())
-
-
-def revenue_by_category(df: pd.DataFrame) -> pd.Series:
-    """
-    Calculate total revenue per category.
-
-    Returns:
-        pd.Series: Revenue grouped by category,
-        sorted in descending order.
-    """
-
 def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
     """
     Calculate total revenue per category.
