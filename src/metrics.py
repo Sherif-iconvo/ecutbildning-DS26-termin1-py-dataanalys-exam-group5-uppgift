@@ -150,3 +150,4 @@ def identify_outliers(df: pd.DataFrame, column: str) -> tuple[pd.DataFrame, floa
     outliers = df[(df[column] < lower_bound) | (df[column] > upper_bound)]
     
     return outliers, lower_bound, upper_bound
+# slutet på Mahmoud fråga (6) avvikelser.

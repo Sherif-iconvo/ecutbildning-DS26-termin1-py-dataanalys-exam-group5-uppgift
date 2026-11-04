@@ -166,6 +166,7 @@ def pie_chart_top3(ax, x, y, title, legend_title=None):
     
 ## slutet på Henrik figurer
 
+# Mahmoud Figuror:
 def plot_outliers_boxplot(df, column):
     fig, ax = plt.subplots(figsize=(8, 5))
 
@@ -200,3 +201,4 @@ def plot_outliers_by_group(df, outliers, group_column):
 
     plt.close(fig)
     return fig
+# slutet på Mahmouds figurer
