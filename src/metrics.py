@@ -28,9 +28,6 @@ Tillhandahåller analytiska funktioner för bearbetning av e-handelstransaktions
 
 """
 
-
-import pandas as pd
-
 # Sherif fråga (3) nyckeltals-funktioner:
 def date_range(df: pd.DataFrame) -> tuple[pd.Timestamp, pd.Timestamp]:           # period covered
     return df["date"].min(), df["date"].max()            
@@ -127,7 +124,7 @@ def city_performance(df: pd.DataFrame, by_month: bool = False) -> pd.DataFrame:
     return result
 
 # slutet på Sherifs fråga (3) nyckeltals-funktioner.
-import pandas as pd
+    
 
 
 def check_data_quality(df: pd.DataFrame) -> None:
@@ -168,12 +165,31 @@ def revenue_by_category(df: pd.DataFrame) -> pd.Series:
     """
 
 def revenue_by_category(df: pd.DataFrame) -> pd.DataFrame:
+    """
+    Calculate total revenue per category.
+    
+    Returns:
+        pd.Series: Revenue grouped by category,
+        sorted in descending order.
+    """
     return (
         df.groupby("category")["revenue"]
         .sum()
         .sort_values(ascending=False)
         .reset_index()
     )
+
+def revenue_by_city(df: pd.DataFrame) -> pd.Series:
+    """
+    Calculate total revenue per city.
+    """
+
+    return (
+        df.groupby("city")["revenue"]
+        .sum()
+        .sort_values(ascending=False)
+    )
+
 def aov_and_units(df):
     """Beräkna AOV, antal order och antal sålda enheter."""
     orders = df["revenue"]  # En rad per order i vår data.
@@ -194,3 +210,5 @@ def sales_totals(df):
 def order_value_spread(df):
     """Visa hur ordervärdena varierar."""
     return df["revenue"].describe()
+
+
