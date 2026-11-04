@@ -39,7 +39,10 @@ class EcommerceAnalyzer:
         self.df: pd.DataFrame = load_and_clean_transactions(filepath)   # the cleaned DataFrame is assigned to self.df. This makes the cleaned dataset persist in memory for as long as your object exists.
 
     # --- Metrics Delegation-metoder---
-
+    # --- Edvins fråga (1): Vad säljer? ---
+    def revenue_by_category(self):
+        return metrics.revenue_by_category(self.df)
+    
     # --- Sherifs fråga (3): När säljer vi? ---
     def date_range(self) -> tuple[pd.Timestamp, pd.Timestamp]: 
         return metrics.date_range(self.df)
