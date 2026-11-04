@@ -159,16 +159,9 @@ def bar(ax, x, y, title, xlabel, ylabel, grid: bool = True):
 ## slutet på Edvins figurer
 
 # Henrik Figuror:
-def pie_chart_top3(top3: pd.DataFrame) -> plt.Figure:
-    fig, ax = plt.subplots(figsize=(8, 5))
-
-    ax.pie(
-        top3["revenue"],
-        labels=top3["category"],
-        autopct="%1.1f%%"
-    )
-
-    ax.set_title("Top 3 Categories by Revenue")
-    plt.close(fig)
-    return fig
+def pie_chart_top3(ax, x, y, title, legend_title=None):
+    ax.pie(y, autopct="%1.1f%%")
+    ax.legend(x, title=legend_title, loc="center left", bbox_to_anchor=(1, 0.5))
+    ax.set_title(title)
+    
 ## slutet på Henrik figurer
