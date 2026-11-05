@@ -10,6 +10,42 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import matplotlib.ticker as ticker
 
+# Edvins Figur gällande fråga (1):
+def bar(ax, x, y, title, xlabel, ylabel, grid: bool = True):
+    x = x
+    y = y
+    ax.bar(x,y)
+    ax.set_title(title)
+    ax.set_xlabel(xlabel)
+    ax.set_ylabel(ylabel)
+    ax.grid(grid, axis="y")
+    return ax
+## slutet på Edvins figurer för fråga (1).
+
+
+
+# --- Onas tillägg - Fråga (2): Stapeldiagram för stadsförsäljning ---
+def plot_city_revenue_bar(city_perf: pd.DataFrame, figsize: tuple[int, int] = (8, 5)) -> plt.figure:
+    """
+    Skapar ett stapeldiagram för total intäkt per stad (Ona-del).
+    """
+    fig, ax = plt.subplots(figsize=figsize)
+    
+    ax.bar(city_perf.index, city_perf["total_revenue"], color="skyblue", edgecolor="navy", alpha=0.8)
+    ax.set_title("Total intäkt per stad", fontsize=12, fontweight="bold", pad=10)
+    ax.set_xlabel("Stad", fontsize=10)
+    ax.set_ylabel("Total Intäkt (SEK)", fontsize=10)
+    
+    ax.grid(True, axis="y", linestyle="--", alpha=0.7)
+    ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
+    plt.xticks(rotation=15, ha="right")
+    
+    fig.tight_layout()
+    plt.close(fig)
+    return fig
+## slutet på Onas figurer för fråga (2).
+
+
 # Sherif Figuror gällande fråga (3):
 # --- 1. Veckodagar (Stapeldiagram Mån->Sön) ---
 def plot_weekday_overview(weekday_summary: pd.DataFrame) -> plt.figure:
@@ -144,28 +180,28 @@ def plot_city_trends(city_performance: pd.DataFrame, figsize: tuple[int, int] = 
 
 ## slutet på Sherifs figurer för fråga (3).
 
-# Edvins Figuror:
-def bar(ax, x, y, title, xlabel, ylabel, grid: bool = True):
-    x = x
-    y = y
-    ax.bar(x,y)
-    ax.set_title(title)
-    ax.set_xlabel(xlabel)
-    ax.set_ylabel(ylabel)
-    ax.grid(grid, axis="y")
-    return ax
 
-## slutet på Edvins figurer
+# Henrik Figuror gällande fråga (5):
+#def pie_chart_top3(ax, x, y, title, legend_title=None):
+#    ax.pie(y, autopct="%1.1f%%")
+#    ax.legend(x, title=legend_title, loc="center left", bbox_to_anchor=(1, 0.5))
+#    ax.set_title(title)
 
-# Henrik Figuror:
-def pie_chart_top3(ax, x, y, title, legend_title=None):
-    ax.pie(y, autopct="%1.1f%%")
-    ax.legend(x, title=legend_title, loc="center left", bbox_to_anchor=(1, 0.5))
-    ax.set_title(title)
+def pie_chart_top3(top_catagories: pd.DataFrame) -> plt.figure:
+    fig, ax = plt.subplots(figsize=(9, 5))
+    ax.pie(top_catagories["revenue"], autopct="%1.1f%%")
+    ax.legend(top_catagories["category"], loc="center left", bbox_to_anchor=(1, 0.5))
+    ax.set_title("topp-3 kategorier efter intäkt")
+    fig.tight_layout()
+    plt.close(fig)
+    return fig
+
+
     
 ## slutet på Henrik figurer
 
-# Mahmoud Figuror:
+
+# Mahmoud Figuror gällande fråga (6):
 def plot_outliers_boxplot(df, column):
     fig, ax = plt.subplots(figsize=(8, 5))
 
@@ -203,22 +239,4 @@ def plot_outliers_by_group(df, outliers, group_column):
 # slutet på Mahmouds figurer
 
 
-# --- Onas tillägg: Stapeldiagram för stadsförsäljning ---
-def plot_city_revenue_bar(city_perf: pd.DataFrame, figsize: tuple[int, int] = (8, 5)) -> plt.figure:
-    """
-    Skapar ett stapeldiagram för total intäkt per stad (Ona-del).
-    """
-    fig, ax = plt.subplots(figsize=figsize)
-    
-    ax.bar(city_perf.index, city_perf["total_revenue"], color="skyblue", edgecolor="navy", alpha=0.8)
-    ax.set_title("Total intäkt per stad", fontsize=12, fontweight="bold", pad=10)
-    ax.set_xlabel("Stad", fontsize=10)
-    ax.set_ylabel("Total Intäkt (SEK)", fontsize=10)
-    
-    ax.grid(True, axis="y", linestyle="--", alpha=0.7)
-    ax.yaxis.set_major_formatter(ticker.StrMethodFormatter("{x:,.0f}"))
-    plt.xticks(rotation=15, ha="right")
-    
-    fig.tight_layout()
-    plt.close(fig)
-    return fig
+

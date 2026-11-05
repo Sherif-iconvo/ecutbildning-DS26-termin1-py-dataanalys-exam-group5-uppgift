@@ -1,30 +1,4 @@
-import pandas as pd
 
-
-class EcommerceAnalyzer:
-    """
-    Klass för analys av e-handelsdata.
-    """
-
-    def __init__(self, df: pd.DataFrame):
-        self.df = df
-
-    def get_total_revenue(self) -> float:
-        """
-        Calculate and return the total revenue.
-        """
-        return self.df["revenue"].sum()
-
-
-if __name__ == "__main__":
-    from io_utils import load_data
-
-    df = load_data()
-
-    analyzer = EcommerceAnalyzer(df)
-
-    print("Total revenue:")
-    print(analyzer.get_total_revenue())
 """
 Kärnklass som samordnar inläsning och rensning av data samt analys av ecommerce transaktionsdata, genom att tillhandahålla delegeringsmetoder för mätetal och visualisering.
 __init__: Initierar analysatorn genom att läsa in och rensa transaktionsdata. Alla andra metoder i klassen kan nu komma åt exakt samma datamängd genom att referera till `self.df`, utan att behöva läsa in eller rensa filen från disken på nytt.
@@ -66,9 +40,18 @@ class EcommerceAnalyzer:
         self.df: pd.DataFrame = load_and_clean_transactions(filepath)   # the cleaned DataFrame is assigned to self.df. This makes the cleaned dataset persist in memory for as long as your object exists.
 
     # --- Metrics Delegation-metoder---
+
     # --- Edvins fråga (1): Vad säljer? ---
     def revenue_by_category(self) -> pd.DataFrame:
         return metrics.revenue_by_category(self.df)
+
+    # --- Onas fråga (2): Var säljer vi? ---
+    def get_total_revenue(self) -> float:
+        """
+        Calculate and return the total revenue.
+        """
+        #return self.df["revenue"].sum()
+        return metrics.revenue_by_city(self.df)
     
     # --- Sherifs fråga (3): När säljer vi? ---
     def date_range(self) -> tuple[pd.Timestamp, pd.Timestamp]: 
@@ -91,7 +74,17 @@ class EcommerceAnalyzer:
 
     def monthly_revenue_change(self) -> pd.DataFrame:
         return metrics.monthly_revenue_change(self.df)
-        # Fråga 4: Hur ser en typisk order ut?
+    
+    # --- Sherifs fråga (1-2 + tid/månad): Vad säljer vi? / Var säljer vi? ---
+    def category_performance(self, by_month: bool = False) -> pd.DataFrame:
+        return metrics.category_performance(self.df, by_month)
+    
+    def city_performance(self, by_month: bool = False) -> pd.DataFrame:
+        return  metrics.city_performance(self.df, by_month)
+
+
+        
+    # bezabeh Fråga 4: Hur ser en typisk order ut?
     def aov_and_units(self):
         return metrics.aov_and_units(self.df)
 
@@ -102,26 +95,25 @@ class EcommerceAnalyzer:
         return metrics.order_value_spread(self.df)
 
 
-    # --- Henriks fråga (3): Top-3 kategorier ---
+    # --- Henriks fråga (5): Top-3 kategorier ---
 
     def top_catagories(self) -> pd.DataFrame:
         return metrics.top_catagories(self.df)
 
-    # --- Sherifs fråga (1-2 + tid/månad): Vad säljer vi? / Var säljer vi? ---
-    def category_performance(self, by_month: bool = False) -> pd.DataFrame:
-        return metrics.category_performance(self.df, by_month)
-
-    def city_performance(self, by_month: bool = False) -> pd.DataFrame:
-        return  metrics.city_performance(self.df, by_month)
-    
-
-    # --- Visualization Delegation ---
+       
 
     # --- Visualization Delegation-metoder ---
 
+    # Edvin fråga(1) figur
     def plot_revenue_by_category(self, ax, categories, revenue, title, xlabel, ylabel) -> plt.figure:
-        return viz.bar(ax,categories, revenue, title, xlabel, ylabel)
+            return viz.bar(ax,categories, revenue, title, xlabel, ylabel)
+
+    # --- Ona fråga 2 figur---
+    def plot_city_revenue_bar(self) -> plt.figure:
+        return viz.plot_city_revenue_bar(self.city_performance())
     
+    
+    # Sherif fråga(3) figuror
     def plot_weekday_overview(self) -> plt.figure:
         return viz.plot_weekday_overview(self.weekday_revenue_summary())
 
@@ -137,8 +129,13 @@ class EcommerceAnalyzer:
     def plot_city_trends(self) -> plt.figure:
         return viz.plot_city_trends(self.city_performance(by_month=True))
     
-    # --- Mahmouds fråga (6): Eventuella avvikelser
 
+    # Henrik fråga(5) figur
+    def pie_chart_top3(self) -> plt.Figure:
+        return viz.pie_chart_top3(self.top_catagories())
+    
+    
+    # --- Mahmouds fråga (6): Eventuella avvikelser
     def identify_outliers(self, column: str) -> tuple[pd.DataFrame, float, float]:
             return metrics.identify_outliers(self.df, column)
     
@@ -152,9 +149,17 @@ class EcommerceAnalyzer:
              self.df, outliers, group_column
     )
 
-    def pie_chart_top3(self) -> plt.Figure:
-        return viz.pie_chart_top3(self.top_catagories())
-# --- Ona fråga 2 ---
-        
-    def plot_city_revenue_bar(self) -> plt.figure:
-        return viz.plot_city_revenue_bar(self.city_performance())
+    
+    
+
+
+
+if __name__ == "__main__":
+    from io_utils import load_data
+
+    df = load_data()
+
+    analyzer = EcommerceAnalyzer(df)
+
+    print("Total revenue:")
+    print(analyzer.get_total_revenue())
