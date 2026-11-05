@@ -91,6 +91,15 @@ class EcommerceAnalyzer:
 
     def monthly_revenue_change(self) -> pd.DataFrame:
         return metrics.monthly_revenue_change(self.df)
+        # Fråga 4: Hur ser en typisk order ut?
+    def aov_and_units(self):
+        return metrics.aov_and_units(self.df)
+
+    def sales_totals(self):
+        return metrics.sales_totals(self.df)
+
+    def order_value_spread(self):
+        return metrics.order_value_spread(self.df)
 
 
     # --- Henriks fråga (3): Top-3 kategorier ---
