@@ -18,6 +18,8 @@ Tillhandahåller analytiska funktioner för bearbetning av e-handelstransaktions
 
 """
 
+import pandas as pd
+
 # Sherif fråga (3) nyckeltals-funktioner:
 def date_range(df: pd.DataFrame) -> tuple[pd.Timestamp, pd.Timestamp]:           # period covered
     return df["date"].min(), df["date"].max()            
