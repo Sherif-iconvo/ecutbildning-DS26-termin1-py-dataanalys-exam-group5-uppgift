@@ -52,6 +52,8 @@ Kolumner: `order_id`, `date`, `city`, `category`, `price`, `units`, `revenue`
    ```bash
    pip install -r requirements.txt
    ```
+4. **Kör rapporten**
+   Öppna notebooks/report.ipynb i VS Code eller Jupyter Notebook och kör alla celler i ordning. Se till att projektets virtuella miljö är vald som Python-kernel.
 
 
 ## Arbetssätt (Agilt)
@@ -66,7 +68,7 @@ Kolumner: `order_id`, `date`, `city`, `category`, `price`, `units`, `revenue`
     - **Korta avstämningar** – vi stämmer av tavlan regelbundet, fördelar nya uppgifter och lyfter eventuella hinder.
 
 
-## Gruppmedlemmar och ansvarsområden (Detta är bara ett exempel; den korrekta strukturen kommer att fastställas genom omröstning.)
+## Gruppmedlemmar och ansvarsområden
 
 ** Grundläggande uppsättning/förarbete:**
 | Namn | Ansvarsområde | Status |
@@ -76,17 +78,12 @@ Kolumner: `order_id`, `date`, `city`, `category`, `price`, `units`, `revenue`
 ** Arbetsuppgifter:**
 | Namn | Analysfråga | Status |
 |------|-------------|--------|
-| _Edvin_ | Vad säljer vi? | ÖPPNA |
-| _Ona_ | Var säljer vi? |  ÖPPNA |
+| _Edvin_ | Vad säljer vi? | Klar |
+| _Ona_ | Var säljer vi? |  Klar|
 | _Sherif_ | När säljer vi? | klar |
-| _Bezabeh_ | Hur ser en typisk order ut? | ÖPPNA |
-| _Henrik_ | Topp-listor  | ÖPPNA |
-| _Mahmoud_ | Eventuella avvikelser | ÖPPNA |
-
-Obs. 
-1) Detta ska fastställas och senare uppdateras. Var och en kommer att ange sitt namn och sin roll eller sitt ansvarsområde i enlighet med vad vi kommit överens om vid det veckomöte vi ska hålla.
-
-2) En filansvarig för de delade filerna betyder inte att filansvarig skriver all kod utan bara håller filen konsekvent (namngivning, docstrings, inga dubbletter av funktioner) och granskar PR som rör den.
+| _Bezabeh_ | Hur ser en typisk order ut? | Klar |
+| _Henrik_ | Topp-listor  | Klar |
+| _Mahmoud_ | Eventuella avvikelser | Klar |
 
 
 ## Miljö
@@ -108,18 +105,21 @@ Installera allt med `pip install -r requirements.txt` (se *Så kör du projektet
 
 Alla nyckeltal beräknas i `src/metrics.py` på den rensade datan och nås via klassen `EcommerceAnalyzer`.
 
-| Nyckeltal | Definition | Används för |
-|-----------|------------|-------------|
-| **Total intäkt** | Summan av `revenue` | Totalnivå, per kategori/stad/period |
-| **Antal ordrar** | Antal unika `order_id` | Efterfrågan per period |
-| **AOV** (Average Order Value) | Total intäkt / antal ordrar | Hur stor en typisk order är |
-| **Förändring mot föregående månad (MoM %)** | (månad − föregående månad) / föregående månad × 100 | Trender och dippar |
-| **Andel av intäkt** | Gruppens intäkt / total intäkt | T.ex. städernas betydelse |
-| **Sålda enheter** | Summan av `units` | Volym per kategori/stad |
+| Nyckeltal | Definition | Används för | Resultat |
+|-----------|------------|-------------|----------|
+| **Total intäkt** | Summan av `revenue` | Totalnivå | 3 502 767,23 SEK
+| **Antal ordrar** | Antal unika `order_id` | Överblick om totala ordrar | 2500 stycken
+| **AOV** (Average Order Value) | Total `revenue` / antal `order_id` | Hur stor en typisk order är | 1 401,11 SEK
+| **Förändring mot föregående månad (MoM %)** | (månad − föregående månad) / föregående månad × 100 | Trender och dippar | Se nedan
+| **Topp 2 stad efter intäkt** | Summan av `revenue` per stad | Se hur städerna presterar |Stockholm: 1 227 201,94 SEK, Göteborg: 859 019,65 SEK
+| **Genomsnittlig sålda enheter** | Summa av `units` / Summan av `order_id` | Se snittet av enhter per order | 2.99 stycken
+| **Topp 3 kategori efter intäkt** | Summan `revenue` per `category` | Vilka kategorier som har presterat bäst| Elektronik: 1 364 228,07 SEK, Sports: 734 653,42 SEK, Clothing: 586 744,91
+| **Antal avvikande värden** | IQR beräkning | Se hur mycket ordrar som är utanför vår snittorder | 111 stycken
+
 
 Här följer nyckeltal värdena (från notebooken, efter lätt städning):
 
-- **Total intäkt & AOV & Förändring mot föregående månad (MoM %):**
+- **Förändring mot föregående månad (MoM %):**
 månatliga intäkter och procentuell förändring från månad till månad (MoM %):
                sum     mean  count  pct_change
 period                                        
@@ -130,11 +130,29 @@ period
 2024-05  632165.16  1459.97    433         9.0
 2024-06  590259.89  1398.72    422        -6.6
 
-- **Total antal orders:** 2500
-- **Genomsnittlig sålda enheter:** 2.99
 
-- ** Andel av intäkt & Sålda enheter (per kategori/stad):**
+# Vårt förslag till ledningen: 
 
+Under perioden 1 januari – 30 juni 2024 omsatte e-handeln 3 502 767 SEK fördelat på 2 500 ordrar.
+ 
+- Insikt A – Elektronik driver verksamheten, med stora ordrar:**
+ 
+- Insikt B – Ordervärdet, inte antalet ordrar, avgör starka och svaga perioder:
+ 
+- Insikt C – Stark koncentration till storstäderna: Stockholm och Göteborg är de två största marknaderna .
+ 
+## Rekommendationer
+ 
+1. Prioritera Stockholm och Göteborg. Dessa städer står för cirka 60 % av de totala intäkterna och bör prioriteras vid framtida marknadsföring. Dessa städer står för cirka 60 % av de totala intäkterna och bör prioriteras vid framtida marknadsföring
 
+2. Höj ordervärdet i svaga perioder (mars och helger) - Paketerbjudanden, tillbehörsförslag i kassan och en tröskel för fri frakt strax över medianordern (1 089 SEK).
+
+3. Planera kampanjer efter kategoriernas starka månader - Elektronikkampanjer i januari–februari, kläder i april och sport inför sommaren.
+ 
+4. Utred de avvikande ordrarna (111 ordrar (4,4 %) är avvikande enligt IQR-metoden) i stället för att ta bort dem. Var kommer de ifrån?
+
+*Begränsning:* Analysen bygger på sex månaders data utan kostnader eller marginaler, så vi kan inte avgöra om mönstren är säsongsbundna eller vilken lönsamhet åtgärderna ger. Åtgärderna bör därför testas och utvärderas med nyckeltalen ovan.
 
 ### Figurer
+Rapporten innehåller flera visualiseringar bland annat stapeldiagram över intäkter per kategori och stad, försäljning över tid samt boxplot för att identifiera avvikande värden.
+Samtliga diagram med tillhörande analyser och förklaringar finns i notebooks/report.ipynb
